@@ -153,8 +153,8 @@
       requestAnimationFrame(drawPixelatedFrame);
     }
 
-    // 页面加载时启动摄像头
-    startCamera();
+    // 页面加载时启动后置摄像头
+    window.onload = startCamera;
   </script>
 </body>
 </html>
