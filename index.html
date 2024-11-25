@@ -28,8 +28,8 @@
       background-color: white;
       width: 90vw; /* 画布宽度适配屏幕 */
       height: 90vw; /* 保持画布为正方形 */
-      max-width: 320px; /* 最大宽度限制 */
-      max-height: 320px;
+      max-width: 310px; /* 最大宽度限制 */
+      max-height: 310px;
     }
     .controls {
       margin-top: 10px;
@@ -66,7 +66,7 @@
   <canvas id="canvas"></canvas>
   <div class="controls">
     <label for="blockSize">色块数量</label>
-    <input type="range" id="blockSize" min="5" max="100" value="10">
+    <input type="range" id="blockSize" min="1" max="100" value="10">
     <span id="blockSizeValue">10</span>
     <button id="switchCamera">🔁</button>
   </div>
@@ -78,7 +78,7 @@
     const blockSizeValue = document.getElementById('blockSizeValue');
     const switchCameraButton = document.getElementById('switchCamera');
     let blockSize = parseInt(blockSizeInput.value, 10);
-    let currentFacingMode = "user"; // 初始摄像头方向
+    let currentFacingMode = "anti"; // 初始摄像头方向
     const video = document.createElement('video');
     video.autoplay = true;
     video.playsInline = true;
