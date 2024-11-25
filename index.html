@@ -88,7 +88,7 @@
     const switchCameraButton = document.getElementById('switchCamera');
     const saveImageButton = document.getElementById('saveImage');
     let blockSize = parseInt(blockSizeInput.value, 10);
-    let currentFacingMode = "environment"; // 默认后置摄像头
+    let currentFacingMode = "user"; // 默认前置摄像头
     const video = document.createElement('video');
     video.autoplay = true;
     video.playsInline = true;
@@ -153,7 +153,7 @@
       requestAnimationFrame(drawPixelatedFrame);
     }
 
-    // 页面加载时启动后置摄像头
+    // 页面加载时启动前置摄像头
     window.onload = startCamera;
   </script>
 </body>
