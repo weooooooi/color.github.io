@@ -72,7 +72,7 @@
   <canvas id="canvas"></canvas>
   <div class="controls">
     <label for="blockSize">色块数量</label>
-    <input type="range" id="blockSize" min="1" max="102" value="5">
+    <input type="range" id="blockSize" min="1" max="102" value="10">
     <span id="blockSizeValue">10</span>
     <div class="buttons">
       <button id="switchCamera">🔁</button>
@@ -117,10 +117,12 @@
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: 300, height: 300, facingMode: currentFacingMode },
+          video: { facingMode: currentFacingMode },
         });
         video.srcObject = stream;
-        video.addEventListener('play', drawPixelatedFrame);
+        video.addEventListener('loadeddata', () => {
+          drawPixelatedFrame(); // 确保视频加载后开始绘制
+        });
       } catch (err) {
         console.error("无法访问摄像头:", err);
         alert("摄像头不可用，请检查设备或权限设置。");
@@ -129,19 +131,20 @@
 
     // 绘制像素化画面
     function drawPixelatedFrame() {
-      const { width, height } = canvas.getBoundingClientRect();
+      const width = 300; // 固定画布宽度
+      const height = 300; // 固定画布高度
       canvas.width = width;
       canvas.height = height;
 
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const { data, width: imgWidth, height: imgHeight } = imageData;
+      ctx.drawImage(video, 0, 0, width, height);
+      const imageData = ctx.getImageData(0, 0, width, height);
+      const { data } = imageData;
 
-      ctx.clearRect(0, 0, imgWidth, imgHeight);
-
-      for (let y = 0; y < imgHeight; y += blockSize) {
-        for (let x = 0; x < imgWidth; x += blockSize) {
-          const i = (y * imgWidth + x) * 4;
+      // 绘制像素化效果
+      ctx.clearRect(0, 0, width, height);
+      for (let y = 0; y < height; y += blockSize) {
+        for (let x = 0; x < width; x += blockSize) {
+          const i = (y * width + x) * 4;
           const r = data[i];
           const g = data[i + 1];
           const b = data[i + 2];
@@ -150,7 +153,7 @@
         }
       }
 
-      requestAnimationFrame(drawPixelatedFrame);
+      requestAnimationFrame(drawPixelatedFrame); // 循环绘制
     }
 
     // 页面加载时启动摄像头
