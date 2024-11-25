@@ -16,7 +16,7 @@
       font-family: Arial, sans-serif;
     }
     h1 {
-      font-size: 25px;
+      font-size: 18px;
       background: linear-gradient(to right, blue, purple);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -26,15 +26,15 @@
     canvas {
       border: 2px solid black;
       background-color: white;
-      width: 90vw; /* 画布宽度适配屏幕 */
-      height: 90vw; /* 保持画布为正方形 */
-      max-width: 310px; /* 最大宽度限制 */
-      max-height: 310px;
+      width: 80vw; /* 画布宽度适配屏幕 */
+      height: 80vw; /* 保持画布为正方形 */
+      max-width: 300px; /* 最大宽度限制 */
+      max-height: 300px;
     }
     .controls {
       margin-top: 10px;
-      width: 90vw; /* 控件区域适配屏幕宽度 */
-      max-width: 400px; /* 限制最大宽度 */
+      width: 60vw; /* 控件区域适配屏幕宽度 */
+      max-width: 300px; /* 限制最大宽度 */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -44,14 +44,20 @@
       font-size: 14px;
     }
     input[type="range"] {
-      width: 60%; /* 滑块宽度自适应 */
+      width: 100%; /* 滑块宽度自适应 */
+    }
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     button {
-      margin-top: 20px; /* 与滑块保持 20px 间距 */
       font-size: 35px; /* 图标大小 */
       background: none;
       border: none;
       cursor: pointer;
+      margin: 0 10px; /* 两个按钮间距总为20px */
     }
     button:focus {
       outline: none;
@@ -65,10 +71,13 @@
   <h1>相机取色器</h1>
   <canvas id="canvas"></canvas>
   <div class="controls">
-    <label for="blockSize">色块数量</label>
-    <input type="range" id="blockSize" min="1" max="100" value="10">
+    <label for="blockSize">色块数量:</label>
+    <input type="range" id="blockSize" min="5" max="100" value="10">
     <span id="blockSizeValue">10</span>
-    <button id="switchCamera">🔁</button>
+    <div class="buttons">
+      <button id="switchCamera">🔁</button>
+      <button id="saveImage">⬇️</button>
+    </div>
   </div>
 
   <script>
@@ -77,8 +86,9 @@
     const blockSizeInput = document.getElementById('blockSize');
     const blockSizeValue = document.getElementById('blockSizeValue');
     const switchCameraButton = document.getElementById('switchCamera');
+    const saveImageButton = document.getElementById('saveImage');
     let blockSize = parseInt(blockSizeInput.value, 10);
-    let currentFacingMode = "anti"; // 初始摄像头方向
+    let currentFacingMode = "environment"; // 默认后置摄像头
     const video = document.createElement('video');
     video.autoplay = true;
     video.playsInline = true;
@@ -91,6 +101,13 @@
     switchCameraButton.addEventListener('click', () => {
       currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
       startCamera();
+    });
+
+    saveImageButton.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = 'pixelated-image.png';
+      link.href = canvas.toDataURL();
+      link.click();
     });
 
     async function startCamera() {
@@ -131,6 +148,7 @@
       requestAnimationFrame(drawPixelatedFrame);
     }
 
+    // 页面加载时启动摄像头
     startCamera();
   </script>
 </body>
