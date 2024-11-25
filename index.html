@@ -26,15 +26,15 @@
     canvas {
       border: 2px solid black;
       background-color: white;
-      width: 80vw; /* 画布宽度适配屏幕 */
-      height: 80vw; /* 保持画布为正方形 */
-      max-width: 300px; /* 最大宽度限制 */
+      width: 80vw;
+      height: 80vw;
+      max-width: 300px;
       max-height: 300px;
     }
     .controls {
       margin-top: 10px;
-      width: 60vw; /* 控件区域适配屏幕宽度 */
-      max-width: 300px; /* 限制最大宽度 */
+      width: 60vw;
+      max-width: 300px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -44,7 +44,7 @@
       font-size: 14px;
     }
     input[type="range"] {
-      width: 100%; /* 滑块宽度自适应 */
+      width: 100%;
     }
     .buttons {
       margin-top: 20px;
@@ -53,11 +53,11 @@
       justify-content: center;
     }
     button {
-      font-size: 35px; /* 图标大小 */
+      font-size: 35px;
       background: none;
       border: none;
       cursor: pointer;
-      margin: 0 10px; /* 两个按钮间距总为20px */
+      margin: 0 10px;
     }
     button:focus {
       outline: none;
@@ -68,7 +68,7 @@
   </style>
 </head>
 <body>
-  <h1>相机取色器</h1>
+  <h1>像素化相机</h1>
   <canvas id="canvas"></canvas>
   <div class="controls">
     <label for="blockSize">色块数量:</label>
@@ -93,16 +93,19 @@
     video.autoplay = true;
     video.playsInline = true;
 
+    // 滑块调整色块大小
     blockSizeInput.addEventListener('input', () => {
       blockSize = parseInt(blockSizeInput.value, 10);
       blockSizeValue.textContent = blockSize;
     });
 
+    // 切换前/后摄像头
     switchCameraButton.addEventListener('click', () => {
       currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
       startCamera();
     });
 
+    // 保存图片
     saveImageButton.addEventListener('click', () => {
       const link = document.createElement('a');
       link.download = 'pixelated-image.png';
@@ -110,6 +113,7 @@
       link.click();
     });
 
+    // 启动摄像头
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -123,6 +127,7 @@
       }
     }
 
+    // 绘制像素化画面
     function drawPixelatedFrame() {
       const { width, height } = canvas.getBoundingClientRect();
       canvas.width = width;
